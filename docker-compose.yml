@@ -1,4 +1,4 @@
-version: "3.7"
+# version: "3.7"
 
 x-datanode_base: &datanode_base
   image: hadoop-datanode
@@ -16,19 +16,27 @@ services:
       - namenode:/opt/hadoop/dfs/name # namenode data mount
       - namenode:/opt/spark/eventLog # spark history log data mount 
       - namenode:/opt/hadoop/yarn/timeline # yarn timeline data mount
+    environment:
+        HDFS_NAMENODE_USER: root
+        HDFS_DATANODE_USER: root
+        HDFS_SECONDARYNAMENODE_USER: root
+        YARN_RESOURCEMANAGER_USER: root
+        YARN_NODEMANAGER_USER: root
+        # JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
     networks:
       - bridge
 #      hs_bridge:
 #        ipv4_address: 192.0.0.5
+
 
   datanode01:
     <<: *datanode_base
     container_name: datanode01
     hostname: datanode01
     volumes:
-      - datanode01:/opt/hadoop/dfs/data
-      - datanode01:/opt/hadoop/yarn/data
-      - namenode:/opt/spark/eventLog
+      - ./datanode01:/opt/hadoop/dfs/data
+      - ./datanode01:/opt/hadoop/yarn/data
+      - ./namenode:/opt/spark/eventLog
 #    networks:
 #      hs_bridge:
 #        ipv4_address: 192.0.0.2 
@@ -40,7 +48,7 @@ services:
       - datanode02:/opt/hadoop/dfs/data
       - datanode02:/opt/hadoop/yarn/data
       - namenode:/opt/spark/eventLog
-#    networks:
+#    netrks:
 #      hs_bridge:
 #        ipv4_address: 192.0.0.3
   datanode03:
@@ -78,6 +86,8 @@ services:
       - bridge
     volumes:
       - namenode:/opt/hadoop/yarn/timeline
+    # environment:
+      # - LD_LIBRARY_PATH=/usr/local/lib
 #      hs_bridge:
 #        ipv4_address: 192.0.0.12
   
@@ -105,8 +115,8 @@ services:
       - bridge
     volumes:
       - namenode:/opt/spark/eventLog
-      - /env/hadoop-eco/hadoop/zeppelin/notebook:/zeppelin-0.10.1-bin-all/notebook
-      - /home/ec2-user/testdata:/testdata
+      # - /env/hadoop-eco/hadoop/zeppelin/notebook:/zeppelin-0.10.1-bin-all/notebook
+      # - /home/ec2-user/testdata:/testdata
 
 volumes:
   namenode:

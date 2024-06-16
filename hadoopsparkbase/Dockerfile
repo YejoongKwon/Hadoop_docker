@@ -1,8 +1,8 @@
 FROM hadoop-base
 
-ENV SPARK_VERSION=3.2.2
-ENV SPARK_FILE_NAME=spark-$SPARK_VERSION-bin-hadoop3.2
-ENV SAPRK_URL=https://dlcdn.apache.org/spark/spark-$SPARK_VERSION/$SPARK_FILE_NAME.tgz
+ENV SPARK_VERSION=3.4.3
+ENV SPARK_FILE_NAME=spark-$SPARK_VERSION-bin-hadoop3
+ENV SAPRK_URL=https://dlcdn.apache.org/spark/spark-3.4.3/spark-3.4.3-bin-hadoop3.tgz
 
 # spark setting
 RUN wget $SAPRK_URL

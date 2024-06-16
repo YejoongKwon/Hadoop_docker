@@ -1,6 +1,6 @@
 FROM centos
 
-MAINTAINER cattmerry@gmail.com
+# MAINTAINER cattmerry@gmail.com
 
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
 RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
@@ -21,5 +21,7 @@ RUN ln -s /usr/local/bin/python3.7 /usr/bin/python3
 RUN ln -s /usr/local/bin/python3.7 /usr/bin/python
 
 # java install
-RUN yum install -y java-1.8.0-openjdk.x86_64
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.312.b07-2.el8_5.x86_64/jre
+RUN yum install -y java-1.8.0-openjdk && \
+    yum install -y java-1.8.0-openjdk-devel
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.312.b07-2.el8_5.aarch64/
+RUN source /etc/profile
