@@ -118,6 +118,62 @@ services:
       # - /env/hadoop-eco/hadoop/zeppelin/notebook:/zeppelin-0.10.1-bin-all/notebook
       # - /home/ec2-user/testdata:/testdata
 
+  hive-server:
+    image: hive
+    env_file:
+      - ./hadoop-hive.env
+    environment:
+      SERVICE_PRECONDITION: "hive-metastore:9083"
+    volumes:
+      - ./data:/data
+    ports:
+      - "10000:10000"
+
+  hive-metastore:
+    image: hive
+    env_file:
+      - ./hadoop-hive.env
+    command: /opt/hive/bin/hive --service metastore
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode:9864 mysql:3306"
+    ports:
+      - "9083:9083"
+
+  mysql:
+    image: mysql:5.7.25
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  presto-coordinator:
+    image: prestodb
+    ports:
+      - "8080:8080"
+
+  presto-worker:
+    image: prestodb
+    volumes:
+      - ./prestodb/worker/etc:/home/presto/etc
+  
+  crawler:
+    image: python
+    volumes:
+      - ./crawler/src:/opt/crawler
+      - ./data:/data
+    tty: true
+  
+  application:
+    image: python
+    volumes:
+      - ./application/src:/opt/application
+    tty: true
+    ports:
+      - "80:80"
+
 volumes:
   namenode:
   datanode01:

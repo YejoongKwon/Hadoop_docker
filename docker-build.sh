@@ -13,4 +13,6 @@ docker build -t yarn-timelineserver ./yarntimelineserver
 docker build -t spark-historyserver ./sparkhistoryserver
 docker build -t zeppelin ./zeppelin
 
-docker-compose up -d
+docker build -t hive ./hive
+docker build -t prestodb ./prestodb
+docker build -t python ./python	
